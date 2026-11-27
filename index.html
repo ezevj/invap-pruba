@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmos Engine - Pitch Deck INVAP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           VARIABLES & RESET
+           ========================================== */
+        :root {
+            --bg-deep: #02040a;
+            --text-main: #e2e8f0;
+            --accent-cyan: #00f0ff;
+            --accent-purple: #7000ff;
+            --font-display: 'Syncopate', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        /* ==========================================
+           FONDOS, TEXTURAS Y ESTRELLAS
+           ========================================== */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 50; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .nebula {
+            position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.5; z-index: 0;
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .nebula-1 { width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(112,0,255,0.4), transparent 60%); top: -20%; left: -20%; }
+        .nebula-2 { width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(0,240,255,0.3), transparent 60%); bottom: -20%; right: -20%; animation-delay: -7s; }
+
+        #starfield { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+
+        /* ==========================================
+           CURSOR MAGNÉTICO
+           ========================================== */
+        .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; }
+        .cursor-dot { width: 8px; height: 8px; background: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan); }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(0, 240, 255, 0.6); transition: width 0.2s, height 0.2s; mix-blend-mode: difference; }
+
+        /* ==========================================
+           TIPOGRAFÍA Y CENTREOS ARREGLADOS
+           ========================================== */
+        .text-outline { -webkit-text-stroke: 2px var(--text-main); color: transparent; font-family: var(--font-display); }
+        
+        .huge-title { 
+            font-size: clamp(2.5rem, 8vw, 9rem); 
+            line-height: 1.1; 
+            text-transform: uppercase; 
+            font-family: var(--font-display); 
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+        .subtitle { 
+            font-size: clamp(1.2rem, 2.5vw, 2rem); 
+            font-weight: 300; 
+            max-width: 900px; 
+            margin: 2rem auto 0 auto; 
+            line-height: 1.6; 
+            color: #a0aec0; 
+            text-align: center;
+        }
+
+        section { position: relative; width: 100%; min-height: 100vh; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 0 5vw; }
+
+        /* HERO CENTRADO */
+        .hero { flex-direction: column; text-align: center; }
+
+        /* PROBLEMA */
+        .problem-section { flex-direction: column; text-align: center; }
+        .reveal-word { display: inline-block; opacity: 0.1; transform: translateY(30px); font-size: clamp(2rem, 5vw, 4rem); font-weight: 700; margin-right: 15px; }
+
+        /* TRACCIÓN */
+        .traction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; width: 100%; max-width: 1400px; align-items: center; margin: 0 auto; }
+        .img-mask { 
+            overflow: hidden; border-radius: 20px; height: 70vh; width: 100%; position: relative; 
+            border: 1px solid rgba(0, 240, 255, 0.3); background: rgba(0,240,255,0.05);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.1);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .img-mask img { width: 100%; height: 130%; object-fit: cover; position: absolute; top: -15%; }
+        .glass-badge { position: absolute; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 1rem 2rem; border: 1px solid rgba(0, 240, 255, 0.5); border-radius: 30px; font-weight: bold; color: var(--accent-cyan); text-transform: uppercase; font-family: var(--font-display); font-size: 0.8rem; }
+
+        /* SOLUCIÓN (Scroll Horizontal) */
+        .horizontal-wrapper { overflow: hidden; width: 100%; }
+        .horizontal-container { display: flex; width: 300vw; height: 100vh; align-items: center; }
+        .panel { width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 5vw; }
+        .panel h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 2rem; font-family: var(--font-display); color: var(--text-main); text-align: center; }
+        
+        .iframe-luxury { 
+            width: 100%; max-width: 1100px; aspect-ratio: 16/9; border-radius: 16px; 
+            border: 1px solid rgba(0, 240, 255, 0.3); box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(0, 240, 255, 0.15); 
+            background: #050914; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .iframe-luxury::before {
+            content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(0,240,255,0.05), transparent); pointer-events: none;
+        }
+
+        /* NEGOCIOS */
+        .biz-section { flex-direction: column; text-align: center; }
+        .cards-container { display: flex; gap: 4rem; justify-content: center; width: 100%; max-width: 1200px; margin-top: 4rem; flex-wrap: wrap; }
+        .tilt-card { 
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(0, 240, 255, 0.2); padding: 4rem; border-radius: 30px; 
+            flex: 1; min-width: 300px; height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transform-style: preserve-3d; perspective: 1000px; backdrop-filter: blur(20px); text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .tilt-card h3 { font-size: 3.5rem; font-family: var(--font-display); color: var(--accent-cyan); transform: translateZ(50px); margin-bottom: 1rem; }
+        .tilt-card p { transform: translateZ(30px); font-size: 1.2rem; color: #a0aec0; line-height: 1.6; }
+
+        /* ROADMAP (NUEVA SECCIÓN) */
+        .roadmap-section { flex-direction: column; text-align: center; }
+        .timeline { display: flex; gap: 2rem; margin-top: 4rem; width: 100%; max-width: 1200px; flex-wrap: wrap; justify-content: center; }
+        .time-node { flex: 1; min-width: 250px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 2rem; border-radius: 20px; text-align: left; position: relative; overflow: hidden; }
+        .time-node::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan); }
+        .time-node h4 { font-family: var(--font-display); color: var(--accent-cyan); font-size: 1.5rem; margin-bottom: 1rem; }
+
+        /* CIERRE (ARREGLADO, SIN PARALLAX QUE LO ROMPA) */
+        .footer-section { flex-direction: column; text-align: center; padding-bottom: 10vh; }
+        .qr-luxury { 
+            width: 280px; height: 280px; padding: 20px; background: rgba(255,255,255,0.95); border-radius: 24px; 
+            margin: 3rem auto; transform: rotate(-3deg); transition: transform 0.5s ease, box-shadow 0.5s ease; 
+            box-shadow: 0 0 60px rgba(0,240,255,0.3); border: 2px solid var(--accent-cyan);
+        }
+        .qr-luxury:hover { transform: rotate(0deg) scale(1.05); box-shadow: 0 0 80px rgba(0,240,255,0.6); }
+
+        @media (max-width: 900px) {
+            .traction-grid { grid-template-columns: 1fr; text-align: center; }
+            .huge-title { font-size: clamp(2rem, 10vw, 4rem); }
+            .iframe-luxury { aspect-ratio: 4/3; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Atmósfera 3D -->
+    <div class="noise-overlay"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <canvas id="starfield"></canvas>
+
+    <!-- Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <main>
+        
+        <!-- SLIDE 1: HERO -->
+        <section class="hero">
+            <div data-speed="0.8">
+                <h1 class="huge-title text-outline">COSMOS</h1>
+                <h1 class="huge-title" style="text-shadow: 0 0 30px rgba(0,240,255,0.3);">ENGINE</h1>
+            </div>
+            <p class="subtitle" data-speed="1.2">El universo es obligatorio en las escuelas, pero las aulas no tienen estrellas.</p>
+        </section>
+
+        <!-- SLIDE 2: PROBLEMA -->
+        <section class="problem-section">
+            <div style="max-width: 1000px;">
+                <span class="reveal-word">Exigencia</span>
+                <span class="reveal-word">curricular,</span><br>
+                <span class="reveal-word text-outline">docentes</span>
+                <span class="reveal-word">sin</span>
+                <span class="reveal-word text-outline">herramientas.</span><br>
+                <span class="reveal-word">Enseñanza</span>
+                <span class="reveal-word">basada</span>
+                <span class="reveal-word">en</span>
+                <span class="reveal-word" style="color: #ff0055; text-shadow: 0 0 30px rgba(255,0,85,0.5);">fotocopias.</span>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: TRACCIÓN -->
+        <section class="traction-section">
+            <div class="traction-grid">
+                <div class="text-block" data-speed="1.1">
+                    <h2 class="huge-title text-outline" style="text-align: left;">TRACCIÓN</h2>
+                    <h2 class="huge-title" style="text-align: left;">EMPÍRICA</h2>
+                    <p class="subtitle" style="text-align: left; margin: 2rem 0 0 0;">3 años validando 'Detectives del Cosmos' en escuelas primarias de Bariloche. El interés de los chicos existe. El hardware físico no escala. El salto es digital.</p>
+                </div>
+                <div class="img-mask">
+                    <!-- ACÁ VA foto-taller.jpg -->
+                    <img class="parallax-img" src="foto-taller.jpg" alt="Validación en Bariloche" onerror="this.style.display='none'">
+                    <span style="color:var(--accent-cyan); font-family:monospace; position:absolute; z-index:-1;">[ ESPACIO PARA foto-taller.jpg ]</span>
+                    <div class="glass-badge">Testeo en Aula N°48</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: SOLUCIÓN (Scroll Horizontal) -->
+        <section class="horizontal-wrapper">
+            <div class="horizontal-container">
+                
+                <!-- Panel 1 -->
+                <div class="panel">
+                    <h2>Ecosistema Interactivo Web</h2>
+                    <div class="iframe-luxury">
+                        <!-- JUEGO LGM-1 -->
+                        <iframe src="./lgm1/index.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
+                        <span style="color:rgba(255,255,255,0.3); font-family:monospace; position:absolute; z-index:1;">[ ESPACIO PARA JUEGO LGM-1 ]</span>
+                    </div>
+                </div>
+                
+                <!-- Panel 2 -->
+                <div class="panel">
+                    <h2>Simulación Titius-Bode</h2>
+                    <div class="iframe-luxury">
+                        <!-- JUEGO TITIUS -->
+                        <iframe src="./titius/index.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
+                        <span style="color:rgba(255,255,255,0.3); font-family:monospace; position:absolute; z-index:1;">[ ESPACIO PARA SIMULADOR TITIUS ]</span>
+                    </div>
+                </div>
+                
+                <!-- Panel 3 -->
+                <div class="panel">
+                    <h2>Kits Físicos (Hardware STEM)</h2>
+                    <div class="iframe-luxury" style="background: transparent; border: none; box-shadow: none;">
+                        <!-- VISOR CAJA 3D -->
+                        <iframe src="./visor-caja.html" allowtransparency="true" style="width:100%; height:100%; border:none; background:transparent; position:relative; z-index:2;"></iframe>
+                        <span style="color:rgba(255,255,255,0.3); font-family:monospace; position:absolute; z-index:1;">[ ESPACIO PARA visor-caja.html ]</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SLIDE 5: MODELO DE NEGOCIOS -->
+        <section class="biz-section">
+            <h2 class="huge-title text-outline">MODELO DE</h2>
+            <h2 class="huge-title">NEGOCIOS</h2>
+            <div class="cards-container">
+                <div class="tilt-card vanilla-tilt">
+                    <h3 class="text-outline">B2G</h3>
+                    <p>Licitación de Kits de Laboratorio Espacial a Ministerios de Educación Provinciales. Impacto y escalabilidad a nivel estatal.</p>
+                </div>
+                <div class="tilt-card vanilla-tilt">
+                    <h3>B2B</h3>
+                    <p>Suscripción anual a la plataforma web (SaaS) para colegios privados. Actualizaciones en la nube, simuladores premium y reportes docentes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: ROADMAP (NUEVO) -->
+        <section class="roadmap-section">
+            <div data-speed="1.1">
+                <h2 class="huge-title" style="font-size: clamp(2rem, 6vw, 6rem);">ESCALABILIDAD</h2>
+                <div class="timeline">
+                    <div class="time-node">
+                        <h4>FASE 1: MVP</h4>
+                        <p style="color:#a0aec0; line-height:1.5;">Despliegue del simulador web y testeo del Kit LGM-1 en escuelas técnicas de Río Negro.</p>
+                    </div>
+                    <div class="time-node">
+                        <h4>FASE 2: SaaS</h4>
+                        <p style="color:#a0aec0; line-height:1.5;">Lanzamiento de suscripciones B2B. Integración de nuevos módulos astronómicos al motor web.</p>
+                    </div>
+                    <div class="time-node">
+                        <h4>FASE 3: Expansión</h4>
+                        <p style="color:#a0aec0; line-height:1.5;">Alianza gubernamental B2G. Cosmos Engine como estándar de enseñanza STEM nacional.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: CIERRE (ARREGLADO EL CORTE DE PANTALLA) -->
+        <section class="footer-section">
+            <!-- IMPORTANTE: Acá le saqué el data-speed para que quede fijo y no se vaya abajo -->
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 class="huge-title">DESPEGUE</h2>
+                <div class="qr-luxury">
+                    <!-- ACÁ VA qr-cosmos.png -->
+                    <img src="qr-cosmos.png" alt="QR" style="width:100%;height:100%;object-fit:contain;border-radius:12px;" onerror="this.style.opacity='0.1'">
+                    <span style="color:#000; font-family:var(--font-display); font-weight:bold; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:-1; font-size:0.8rem; text-align:center;">FALTA<br>QR.PNG</span>
+                </div>
+                <h3 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem;">Ezequiel Velasquez Jeandet</h3>
+                <p style="font-size: 1.2rem; color: var(--accent-cyan); font-weight: 500; letter-spacing: 2px;">Ing. en Telecomunicaciones (UNRN)</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Librerías -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- LÓGICA -->
+    <script>
+        // 1. LENIS (SMOOTH SCROLL)
+        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time)=>{ lenis.raf(time * 1000) });
+        gsap.ticker.lagSmoothing(0);
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // REFRESCAR GSAP AL CARGAR TODO PARA QUE EL SCROLL NO SE CORTE
+        window.addEventListener('load', () => {
+            ScrollTrigger.refresh();
+        });
+
+        // 2. ESTRELLAS CANVAS
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let width, height, stars;
+
+        function initStars() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            stars = [];
+            const numStars = Math.floor((width * height) / 3500); 
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * width, y: Math.random() * height,
+                    radius: Math.random() * 1.5,
+                    vx: Math.floor(Math.random() * 50) - 25, vy: Math.floor(Math.random() * 50) - 25,
+                    alpha: Math.random()
+                });
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, width, height);
+            stars.forEach(star => {
+                star.y -= star.vy * 0.003; star.x -= star.vx * 0.003;
+                if (star.y < 0) star.y = height; if (star.y > height) star.y = 0;
+                if (star.x < 0) star.x = width; if (star.x > width) star.x = 0;
+                star.alpha += (Math.random() - 0.5) * 0.05;
+                if(star.alpha < 0.1) star.alpha = 0.1; if(star.alpha > 1) star.alpha = 1;
+                ctx.beginPath(); ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 240, 255, ${star.alpha})`; ctx.fill();
+            });
+            requestAnimationFrame(animateStars);
+        }
+        window.addEventListener('resize', initStars);
+        initStars(); animateStars();
+
+        // 3. CURSOR
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1 });
+            gsap.to(cursorOutline, { x: e.clientX, y: e.clientY, duration: 0.3 });
+        });
+        document.querySelectorAll('a, iframe, button, .qr-luxury, .tilt-card').forEach(el => {
+            el.addEventListener('mouseenter', () => gsap.to(cursorOutline, { scale: 1.5, borderColor: '#fff' }));
+            el.addEventListener('mouseleave', () => gsap.to(cursorOutline, { scale: 1, borderColor: 'rgba(0, 240, 255, 0.6)' }));
+        });
+
+        // 4. PARALLAX
+        gsap.utils.toArray('[data-speed]').forEach(el => {
+            const speed = el.getAttribute('data-speed');
+            gsap.to(el, {
+                y: () => (1 - parseFloat(speed)) * (ScrollTrigger.maxScroll(window) - (ScrollTrigger.maxScroll(window)/2)),
+                ease: "none",
+                scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true }
+            });
+        });
+
+        // 5. REVELADO PROBLEMA
+        gsap.to(gsap.utils.toArray('.reveal-word'), {
+            opacity: 1, y: 0, stagger: 0.1, ease: "power2.out",
+            scrollTrigger: { trigger: ".problem-section", start: "top 60%", end: "center center", scrub: 1 }
+        });
+
+        // 6. PARALLAX FOTO
+        gsap.to('.parallax-img', {
+            yPercent: 30, ease: "none",
+            scrollTrigger: { trigger: ".img-mask", start: "top bottom", end: "bottom top", scrub: true }
+        });
+
+        // 7. SCROLL HORIZONTAL
+        const hzContainer = document.querySelector('.horizontal-container');
+        const panels = gsap.utils.toArray('.panel');
+        gsap.to(panels, {
+            xPercent: -100 * (panels.length - 1), ease: "none",
+            scrollTrigger: {
+                trigger: ".horizontal-wrapper", pin: true, scrub: 1,
+                snap: 1 / (panels.length - 1),
+                end: () => "+=" + hzContainer.offsetWidth
+            }
+        });
+
+        // 8. TILT 3D
+        document.querySelectorAll('.vanilla-tilt').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left, y = e.clientY - rect.top;
+                const centerX = rect.width / 2, centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+                card.style.transition = "transform 0.5s ease";
+            });
+            card.addEventListener('mouseenter', () => { card.style.transition = "none"; });
+        });
+    </script>
+</body>
+</html>
