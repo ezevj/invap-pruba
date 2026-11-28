@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radiotelescopio Avanzado LGM-1</title>
+  <style>
+    :root {
+      --verde-fosforo: #33ff00;
+      --verde-oscuro: #0a3300;
+      --fondo: #0d0d0d;
+    }
+    
+    body { 
+      background-color: var(--fondo); 
+      color: var(--verde-fosforo); 
+      font-family: 'Courier New', Courier, monospace; 
+      padding: 10px; 
+      margin: 0;
+      font-size: 14px;
+    }
+
+    h2 { 
+      text-align: center;
+      text-transform: uppercase; 
+      letter-spacing: 2px; 
+      text-shadow: 0 0 10px var(--verde-fosforo);
+      font-size: 18px;
+      margin-top: 5px;
+    }
+
+    /* Pantalla CRT y Revelación */
+    .monitor-crt {
+      background-color: #001100;
+      border: 4px solid #333;
+      border-radius: 10px;
+      padding: 5px;
+      box-shadow: inset 0 0 20px #000, 0 0 15px var(--verde-oscuro);
+      position: relative;
+      margin-bottom: 10px;
+      height: 150px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      border-radius: 5px;
+    }
+
+    #revelacion {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: #000;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2s ease-in-out;
+      z-index: 10;
+    }
+
+    .pulsar-anim {
+      width: 20px; height: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #0ff, 0 0 50px #0ff;
+      animation: latido 1.337s infinite;
+    }
+
+    @keyframes latido {
+      0% { transform: scale(1); box-shadow: 0 0 20px #0ff; }
+      10% { transform: scale(2.5); box-shadow: 0 0 50px #0ff, 0 0 100px #0ff; }
+      100% { transform: scale(1); box-shadow: 0 0 20px #0ff; }
+    }
+
+    .scanlines {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Consola de comandos */
+    #consola {
+      background-color: #000;
+      border: 1px solid var(--verde-oscuro);
+      height: 70px;
+      overflow: hidden;
+      padding: 5px;
+      font-size: 12px;
+      margin-bottom: 15px;
+      color: #aaa;
+    }
+
+    .panel {
+      background-color: #1a1a1a;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    /* Post-it de pista corregido */
+    .pista {
+      background-color: #ffeb3b;
+      color: #000;
+      padding: 10px 15px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 13px;
+      transform: rotate(-2deg);
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+      margin: 10px auto 30px auto; /* Centrado y con 30px de margen inferior */
+      border-radius: 2px;
+      width: fit-content; /* Se adapta al contenido, no al ancho total */
+      max-width: 90%;
+    }
+
+    .controles-coord {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .coord-input {
+      width: 45%;
+    }
+    
+    label { display: block; font-size: 12px; margin-bottom: 3px; }
+    
+    input[type=number] {
+      width: 100%;
+      padding: 8px;
+      background: #000;
+      color: var(--verde-fosforo);
+      border: 1px solid var(--verde-fosforo);
+      box-sizing: border-box;
+      text-align: center;
+      font-family: monospace;
+    }
+
+    input[type=range] { width: 100%; margin: 10px 0; accent-color: var(--verde-fosforo); }
+
+    .btn-retro { 
+      background-color: #222; 
+      color: var(--verde-fosforo); 
+      border: 2px solid var(--verde-fosforo); 
+      padding: 10px; 
+      font-size: 14px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      border-radius: 5px; 
+      width: 100%;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 0 var(--verde-oscuro);
+    }
+    
+    .btn-retro:active:not(:disabled) { 
+      box-shadow: 0 1px 0 var(--verde-oscuro);
+      transform: translateY(3px);
+      background-color: var(--verde-oscuro);
+    }
+
+    .btn-retro:disabled { border-color: #555; color: #555; box-shadow: 0 4px 0 #222; cursor: not-allowed; }
+    .btn-accion { border-color: #00aaff; color: #00aaff; box-shadow: 0 4px 0 #005580; }
+    .btn-alerta { border-color: #ffcc00; color: #ffcc00; box-shadow: 0 4px 0 #997a00; }
+
+  </style>
+</head>
+<body>
+
+  <h2>Estación LGM-1</h2>
+  
+  <div class="monitor-crt">
+    <canvas id="osciloscopio"></canvas>
+    <div id="revelacion">
+      <div class="pulsar-anim"></div>
+    </div>
+    <div class="scanlines"></div>
+  </div>
+
+  <div id="consola">Iniciando sistema OS-RADIO...<br>Esperando comandos de usuario.</div>
+
+  <div class="panel">
+    <div class="pista">
+      <strong>Pista de J. Bell:</strong><br>
+      "Detecté algo raro en el sector.<br>
+      Apuntar a <strong>AR: 19.3</strong> | <strong>DEC: 21.4</strong><br>
+      Frecuencia estimada: ~133.7 MHz"
+    </div>
+
+    <div class="controles-coord">
+      <div class="coord-input">
+        <label>Ascensión Recta (AR)</label>
+        <input type="number" id="in-ar" step="0.1" value="0.0">
+      </div>
+      <div class="coord-input">
+        <label>Declinación (DEC)</label>
+        <input type="number" id="in-dec" step="0.1" value="0.0">
+      </div>
+    </div>
+
+    <label id="lbl-freq">Frecuencia: 80.0 MHz</label>
+    <input type="range" id="dial" min="80" max="160" step="0.1" value="80">
+    
+    <button id="btn-encendido" class="btn-retro">1. Encender Sistema</button>
+    <button id="btn-filtro" class="btn-retro btn-accion" disabled>2. Aplicar Filtro Pasa-Banda</button>
+    <button id="btn-audio" class="btn-retro btn-alerta" disabled>3. Decodificar a Visual/Audio</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('osciloscopio');
+    const ctx = canvas.getContext('2d');
+    const dial = document.getElementById('dial');
+    const lblFreq = document.getElementById('lbl-freq');
+    const inAR = document.getElementById('in-ar');
+    const inDEC = document.getElementById('in-dec');
+    const btnEncendido = document.getElementById('btn-encendido');
+    const btnFiltro = document.getElementById('btn-filtro');
+    const btnAudio = document.getElementById('btn-audio');
+    const consola = document.getElementById('consola');
+    const revelacion = document.getElementById('revelacion');
+
+    // Manejo de la consola (Pila LIFO)
+    let pilaLogs = ["> Sistema inactivo."];
+    function logCmd(texto) {
+      pilaLogs.unshift("> " + texto); // Apilar arriba
+      if (pilaLogs.length > 4) pilaLogs.pop(); // Mantener solo 4 líneas
+      consola.innerHTML = pilaLogs.join('<br>');
+    }
+
+    // Ajuste de tamaño de canvas
+    canvas.width = canvas.parentElement.clientWidth - 10;
+    canvas.height = canvas.parentElement.clientHeight - 10;
+
+    let audioCtx, ruidoNodo, gananciaRuido, intervaloPulsar;
+    let estado = { encendido: false, enCoordenadas: false, enFrecuencia: false, filtroActivo: false, revelado: false };
+    let pulsosActivos = [];
+
+    // Motor de dibujo
+    function dibujarOsciloscopio() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      ctx.strokeStyle = '#33ff00';
+      ctx.lineWidth = 1.5;
+
+      let ruidoVisual = estado.encendido ? (estado.filtroActivo ? 2 : 20) : 0;
+      let yMedia = canvas.height / 2;
+
+      for (let x = 0; x < canvas.width; x += 3) {
+        let y = yMedia + (Math.random() - 0.5) * ruidoVisual * 2;
+        
+        if (estado.enCoordenadas && estado.enFrecuencia) {
+          pulsosActivos.forEach(pulso => {
+            if (Math.abs(x - pulso.x) < 15) {
+              let distorsion = estado.filtroActivo ? 0 : (Math.random() - 0.5) * 10;
+              y -= (pulso.altura + distorsion) * Math.sin((1 - Math.abs(x - pulso.x)/15) * Math.PI);
+            }
+          });
+        }
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      pulsosActivos.forEach(pulso => pulso.x += (canvas.width / 40));
+      pulsosActivos = pulsosActivos.filter(p => p.x < canvas.width + 20);
+
+      requestAnimationFrame(dibujarOsciloscopio);
+    }
+    dibujarOsciloscopio();
+
+    function iniciarRuido() {
+      if(!audioCtx) return;
+      const bufferSize = audioCtx.sampleRate * 2;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+      
+      ruidoNodo = audioCtx.createBufferSource();
+      ruidoNodo.buffer = buffer;
+      ruidoNodo.loop = true;
+      gananciaRuido = audioCtx.createGain();
+      gananciaRuido.gain.value = 0.15;
+      ruidoNodo.connect(gananciaRuido);
+      gananciaRuido.connect(audioCtx.destination);
+      ruidoNodo.start();
+    }
+
+    function reproducirLatido() {
+      pulsosActivos.push({x: 0, altura: canvas.height/2.5});
+      
+      if (!estado.revelado || !audioCtx) return;
+
+      let osc = audioCtx.createOscillator();
+      let gananciaPulso = audioCtx.createGain();
+      osc.type = estado.filtroActivo ? 'triangle' : 'sawtooth';
+      osc.frequency.setValueAtTime(estado.filtroActivo ? 150 : 200, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.1);
+      
+      gananciaPulso.gain.setValueAtTime(0, audioCtx.currentTime);
+      gananciaPulso.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.01);
+      gananciaPulso.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+
+      osc.connect(gananciaPulso);
+      gananciaPulso.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    }
+
+    function evaluarSistemas() {
+      if (!estado.encendido) return;
+
+      let ar = parseFloat(inAR.value);
+      let dec = parseFloat(inDEC.value);
+      let freq = parseFloat(dial.value);
+
+      lblFreq.innerText = `Frecuencia: ${freq.toFixed(1)} MHz`;
+
+      estado.enCoordenadas = (Math.abs(ar - 19.3) < 0.1 && Math.abs(dec - 21.4) < 0.1);
+      estado.enFrecuencia = (freq > 133.0 && freq < 134.5);
+
+      if (estado.enCoordenadas && estado.enFrecuencia) {
+        if (!intervaloPulsar) {
+          logCmd("SEÑAL ANÓMALA DETECTADA. PATRÓN REPETITIVO.");
+          logCmd("ALERTA: Alto nivel de ruido electromagnético.");
+          btnFiltro.disabled = false;
+          intervaloPulsar = setInterval(reproducirLatido, 1337);
+        }
+      } else {
+        clearInterval(intervaloPulsar);
+        intervaloPulsar = null;
+        btnFiltro.disabled = true;
+        btnAudio.disabled = true;
+        estado.filtroActivo = false;
+        btnFiltro.innerText = "2. Aplicar Filtro Pasa-Banda";
+        btnFiltro.style.backgroundColor = "#222";
+        if(gananciaRuido) gananciaRuido.gain.value = 0.15;
+      }
+    }
+
+    btnEncendido.onclick = () => {
+      if (!estado.encendido) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        estado.encendido = true;
+        btnEncendido.innerText = "Apagar Sistema";
+        btnEncendido.style.color = "red";
+        logCmd("Sistema de antenas ACTIVADO.");
+        iniciarRuido();
+        evaluarSistemas();
+      } else {
+        estado.encendido = false;
+        estado.filtroActivo = false;
+        estado.revelado = false;
+        btnEncendido.innerText = "1. Encender Sistema";
+        btnEncendido.style.color = "var(--verde-fosforo)";
+        btnFiltro.disabled = true;
+        btnAudio.disabled = true;
+        revelacion.style.opacity = 0;
+        clearInterval(intervaloPulsar);
+        intervaloPulsar = null;
+        if (audioCtx) audioCtx.close();
+        logCmd("Sistema APAGADO.");
+      }
+    };
+
+    dial.oninput = evaluarSistemas;
+    inAR.onchange = () => { logCmd(`Moviendo plato a AR: ${inAR.value}...`); evaluarSistemas(); };
+    inDEC.onchange = () => { logCmd(`Moviendo plato a DEC: ${inDEC.value}...`); evaluarSistemas(); };
+
+    btnFiltro.onclick = () => {
+      estado.filtroActivo = true;
+      btnFiltro.innerText = "Filtro Aplicado";
+      btnFiltro.style.backgroundColor = "#005580";
+      btnFiltro.disabled = true;
+      btnAudio.disabled = false;
+      logCmd("Filtro Pasa-Banda ejecutado. Onda limpia.");
+      if(gananciaRuido) gananciaRuido.gain.value = 0.01; 
+    };
+
+    btnAudio.onclick = () => {
+      estado.revelado = true;
+      btnAudio.disabled = true;
+      logCmd("DECODIFICANDO ESTRUCTURA ESTELAR...");
+      revelacion.style.opacity = 1; 
+    };
+  </script>
+</body>
+</html>
