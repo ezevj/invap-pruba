@@ -83,20 +83,20 @@
         }
 
         /* Todas las secciones ocuparán obligatoriamente el 100% de la altura de la pantalla */
-        section { position: relative; width: 100%; min-height: 100vh; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 5vh 5vw; flex-direction: column;}
+        section { position: relative; width: 100%; min-height: 100vh; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 5vh 5vw; flex-direction: column; overflow: hidden;}
 
-        /* SLIDE 1 & 2 (Separación Forzada para evitar superposición) */
+        /* SLIDE 1 & 2 (Separación Forzada) */
         .hero { justify-content: center; text-align: center; min-height: 100vh; }
         .problem-section { justify-content: center; text-align: center; min-height: 100vh; } 
         
         .reveal-word { display: inline-block; opacity: 0.1; transform: translateY(30px); font-size: clamp(1.8rem, 4vw, 3.5rem); font-weight: 700; margin-right: 15px; line-height: 1.4; }
 
         /* TRACCIÓN */
-        .traction-section { justify-content: center; text-align: center; min-height: 100vh;}
-        .traction-content { max-width: 1000px; margin: 0 auto; }
+        .traction-section { justify-content: center; text-align: center; min-height: 100vh; background: var(--bg-deep);}
+        .traction-content { max-width: 1000px; margin: 0 auto; z-index: 10; position: relative;}
 
         /* SLIDE CAJA ABIERTA (Despiece con JPG Blending) */
-        .despiece-section { text-align: center; min-height: 100vh; }
+        .despiece-section { text-align: center; min-height: 100vh; background: var(--bg-deep);}
         .foto-premium-container {
             width: 100%; max-width: 1000px; height: 60vh; margin-top: 3rem;
             position: relative; display: flex; justify-content: center; align-items: center;
@@ -110,11 +110,11 @@
         }
 
         /* LGM-1 EXCLUSIVA (Vertical) */
-        .lgm1-section { flex-direction: column; text-align: center; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .lgm1-section { flex-direction: column; text-align: center; min-height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--bg-deep);}
 
         /* SOLUCIÓN (Scroll Horizontal de 2 Paneles: Titius y Caja) */
         .horizontal-wrapper { overflow: hidden; width: 100%; min-height: 100vh; display: block; padding: 0;}
-        .horizontal-container { display: flex; width: 200vw; height: 100vh; align-items: center; flex-wrap: nowrap; }
+        .horizontal-container { display: flex; width: 200vw; height: 100vh; align-items: center; flex-wrap: nowrap; background: var(--bg-deep);}
         .panel { flex: 0 0 100vw; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 5vw; }
         .panel h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 2rem; font-family: var(--font-display); color: var(--text-main); text-align: center; }
         
@@ -127,7 +127,7 @@
         .iframe-luxury iframe { pointer-events: auto; }
 
         /* NEGOCIOS Y ROADMAP */
-        .biz-section, .roadmap-section { text-align: center; min-height: 100vh; justify-content: center; }
+        .biz-section, .roadmap-section { text-align: center; min-height: 100vh; justify-content: center; background: var(--bg-deep);}
         
         .cards-container { 
             display: flex; gap: 3rem; justify-content: center; align-items: stretch;
@@ -156,7 +156,7 @@
         .time-node p { flex-grow: 1; } 
 
         /* CIERRE DEL GRUPO */
-        .footer-section { text-align: center; min-height: 100vh; justify-content: center;}
+        .footer-section { text-align: center; min-height: 100vh; justify-content: center; background: var(--bg-deep);}
         .qr-luxury { 
             width: 260px; height: 260px; padding: 15px; background: rgba(255,255,255,0.95); border-radius: 24px; 
             margin: 3rem auto; transform: rotate(-3deg); transition: transform 0.5s ease, box-shadow 0.5s ease; 
@@ -185,11 +185,11 @@
         
         <!-- SLIDE 1: HERO -->
         <section class="hero">
-            <div data-speed="0.2"> <!-- Parallax casi anulado para máxima estabilidad -->
+            <div> 
                 <h1 class="huge-title text-outline">COSMOS</h1>
                 <h1 class="huge-title" style="text-shadow: 0 0 30px rgba(0,240,255,0.3);">ENGINE</h1>
             </div>
-            <p class="subtitle" data-speed="0.5">El universo es obligatorio en las escuelas, pero las aulas no tienen estrellas.</p>
+            <p class="subtitle">El universo es obligatorio en las escuelas, pero las aulas no tienen estrellas.</p>
         </section>
 
         <!-- SLIDE 2: EL PROBLEMA -->
@@ -212,30 +212,30 @@
 
         <!-- SLIDE 3: TRACCIÓN DEL EQUIPO -->
         <section class="traction-section">
-            <div class="traction-content" data-speed="0.8">
+            <div class="traction-content">
                 <h2 class="huge-title text-outline">TRACCIÓN</h2>
                 <h2 class="huge-title">EMPÍRICA</h2>
                 <p class="subtitle">Llevamos 3 años validando metodologías STEM en aulas reales de Bariloche. El interés del alumnado es absoluto y los docentes piden soluciones. El hardware artesanal no escala. Cosmos Engine es la solución pedagógica definitiva.</p>
             </div>
         </section>
 
-        <!-- SLIDE 4: INTERIOR DEL KIT (Foto Directa de la Nube) -->
+        <!-- SLIDE 4: INTERIOR DEL KIT -->
         <section class="despiece-section">
-            <div data-speed="0.9">
+            <div>
                 <h2 class="huge-title">HARDWARE</h2>
                 <h2 class="huge-title text-outline">PEDAGÓGICO</h2>
                 <p class="subtitle">Componentes reales de telecomunicaciones, simplificados para el aula.</p>
             </div>
             
-            <div class="foto-premium-container" data-speed="1.1">
-                <!-- Enlace directo a la imagen generada en la nube, ya no depende de tu GitHub -->
-                <img src="https://storage.googleapis.com/gweb-cloudblog-publish/original_images/cosmos-engine-cutout-open-white-recorte-sin-fondo.jpg" alt="Despiece del Kit Cosmos Engine" onerror="this.src='https://dummyimage.com/1000x600/020308/00f0ff.png&text=ERROR+EN+LA+NUBE+-+SUBIR+FOTO'">
+            <div class="foto-premium-container">
+                <!-- Vuelve a buscar el archivo local en tu GitHub -->
+                <img src="kit-abierto.jpg" alt="Despiece del Kit Cosmos Engine" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\'><text x=\'50%\' y=\'50%\' fill=\'#00f0ff\' font-family=\'monospace\' font-size=\'20px\' text-anchor=\'middle\'>FALTA ARCHIVO kit-abierto.jpg EN GITHUB</text></svg>'">
             </div>
         </section>
 
         <!-- SLIDE 5: LGM-1 EXCLUSIVA -->
         <section class="lgm1-section">
-            <div data-speed="0.9" style="margin-bottom: 2rem;">
+            <div style="margin-bottom: 2rem;">
                 <h2 class="huge-title text-outline">MISIÓN</h2>
                 <h2 class="huge-title">LGM-1</h2>
                 <p class="subtitle">Analiza señales, descubre púlsares y aprende telecomunicaciones.</p>
@@ -289,7 +289,7 @@
 
         <!-- SLIDE 8: ROADMAP (ESCALABILIDAD) -->
         <section class="roadmap-section">
-            <div data-speed="1.1" style="width: 100%;">
+            <div style="width: 100%;">
                 <h2 class="huge-title" style="font-size: clamp(2rem, 6vw, 6rem);">ESCALABILIDAD</h2>
                 <div class="timeline">
                     <div class="time-node">
@@ -395,23 +395,13 @@
             el.addEventListener('mouseleave', () => gsap.to(cursorOutline, { scale: 1, borderColor: 'rgba(0, 240, 255, 0.5)' }));
         });
 
-        // 4. EFECTO PARALLAX
-        gsap.utils.toArray('[data-speed]').forEach(el => {
-            const speed = el.getAttribute('data-speed');
-            gsap.to(el, {
-                y: () => (1 - parseFloat(speed)) * (ScrollTrigger.maxScroll(window) - (ScrollTrigger.maxScroll(window)/2)),
-                ease: "none",
-                scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true }
-            });
-        });
-
         // 5. REVELADO TEXTOS (Problema)
         gsap.to(gsap.utils.toArray('.reveal-word'), {
             opacity: 1, y: 0, stagger: 0.1, ease: "power2.out",
             scrollTrigger: { trigger: ".problem-section", start: "top 60%", end: "center center", scrub: 1 }
         });
 
-        // 6. SCROLL HORIZONTAL (Titius y Caja)
+        // 6. SCROLL HORIZONTAL DE ECOSISTEMA (Titius y Caja)
         const hzContainer = document.querySelector('.horizontal-container');
         const panels = gsap.utils.toArray('.panel');
         gsap.to(panels, {
