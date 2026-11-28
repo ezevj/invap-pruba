@@ -93,26 +93,28 @@
         .traction-section { justify-content: center; text-align: center; }
         .traction-content { max-width: 1000px; margin: 0 auto; }
 
-        /* SLIDE CAJA ABIERTA (Despiece) */
+        /* SLIDE CAJA ABIERTA (Despiece con JPG Blending) */
         .despiece-section { text-align: center; padding-top: 5vh; }
         .foto-premium-container {
-            width: 100%; max-width: 1200px; height: 50vh; margin-top: 3rem;
+            width: 100%; max-width: 1000px; height: 60vh; margin-top: 3rem;
             position: relative; display: flex; justify-content: center; align-items: center;
-            border-radius: 20px; background: radial-gradient(circle, rgba(0,240,255,0.05), transparent 70%);
         }
         .foto-premium-container img {
-            width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+            width: 100%; height: 100%; object-fit: contain; 
+            /* Esto borra el fondo negro del JPG y lo fusiona con las estrellas */
+            mix-blend-mode: lighten;
+            /* Suaviza los bordes de la foto */
+            mask-image: radial-gradient(circle, black 60%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle, black 60%, transparent 100%);
+            filter: contrast(1.1) brightness(1.1);
         }
 
-        /* SOLUCIÓN (Scroll Horizontal de 3 Paneles - ARREGLADO EL ANCHO) */
+        /* SOLUCIÓN (Scroll Horizontal de 3 Paneles) */
         .horizontal-wrapper { overflow: hidden; width: 100%; min-height: 100vh; display: block; padding: 0;}
-        /* 300vw exactos para 3 paneles (LGM1, Titius, Caja) */
         .horizontal-container { display: flex; width: 300vw; height: 100vh; align-items: center; flex-wrap: nowrap; }
-        /* Flex 0 0 100vw evita que se aplasten y se corten */
         .panel { flex: 0 0 100vw; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 5vw; }
         .panel h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 2rem; font-family: var(--font-display); color: var(--text-main); text-align: center; }
         
-        /* Contenedores de iframes aislados para evitar bugs de scroll */
         .iframe-luxury { 
             width: 100%; max-width: 1200px; aspect-ratio: 16/9; border-radius: 16px; 
             border: 1px solid rgba(0, 240, 255, 0.3); box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(0, 240, 255, 0.1); 
@@ -193,7 +195,7 @@
             </div>
         </section>
 
-        <!-- SLIDE 3: TRACCIÓN DEL EQUIPO (Sin foto) -->
+        <!-- SLIDE 3: TRACCIÓN DEL EQUIPO -->
         <section class="traction-section">
             <div class="traction-content" data-speed="1.1">
                 <h2 class="huge-title text-outline">TRACCIÓN</h2>
@@ -202,7 +204,7 @@
             </div>
         </section>
 
-        <!-- SLIDE 4: INTERIOR DEL KIT -->
+        <!-- SLIDE 4: INTERIOR DEL KIT CON LA FOTO -->
         <section class="despiece-section">
             <div data-speed="0.9">
                 <h2 class="huge-title">HARDWARE</h2>
@@ -212,23 +214,29 @@
             
             <div class="foto-premium-container" data-speed="1.1">
                 <!-- ACÁ VA LA FOTO EN ALTA CALIDAD DE LAS PIEZAS -->
-                <img src="kit-abierto.png" alt="Despiece del Kit Cosmos Engine" onerror="this.style.display='none'">
+                <img src="kit-abierto.jpg" alt="Despiece del Kit Cosmos Engine" onerror="this.style.display='none'">
             </div>
         </section>
 
-        <!-- SLIDE 5: ECOSISTEMA (Scroll Horizontal de 3 Paneles: LGM1, Titius y Caja) -->
+        <!-- SLIDE 5: LGM-1 EXCLUSIVA -->
+        <section class="lgm1-section" style="flex-direction: column; text-align: center; padding-top: 5vh; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
+            <div data-speed="0.9" style="margin-bottom: 2rem;">
+                <h2 class="huge-title text-outline">MISIÓN</h2>
+                <h2 class="huge-title">LGM-1</h2>
+                <p class="subtitle">Analiza señales, descubre púlsares y aprende telecomunicaciones.</p>
+            </div>
+            
+            <!-- ACÁ LLAMAMOS AL ARCHIVO EXACTO DE TU GITHUB: lgm1.html -->
+            <div class="iframe-luxury" style="max-width: 1200px; height: 60vh; border-radius: 20px;" data-lenis-prevent="true">
+                <iframe src="lgm1.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: SOLUCIÓN (Scroll Horizontal de 2 Paneles: Titius y Caja) -->
         <section class="horizontal-wrapper">
             <div class="horizontal-container">
-                
-                <!-- Panel 1: Simulador LGM-1 -->
-                <div class="panel">
-                    <h2>MISIÓN LGM-1</h2>
-                    <div class="iframe-luxury" data-lenis-prevent="true">
-                        <iframe src="lgm1.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
-                    </div>
-                </div>
 
-                <!-- Panel 2: Simulador Titius-Bode -->
+                <!-- Panel 1: Simulador Titius-Bode -->
                 <div class="panel">
                     <h2>Simulación Titius-Bode</h2>
                     <div class="iframe-luxury" data-lenis-prevent="true">
@@ -236,7 +244,7 @@
                     </div>
                 </div>
                 
-                <!-- Panel 3: Visor 3D -->
+                <!-- Panel 2: Visor 3D -->
                 <div class="panel">
                     <h2>Diseño Industrial (Empaque)</h2>
                     <div class="iframe-luxury" style="background: transparent; border: none; box-shadow: none;" data-lenis-prevent="true">
@@ -247,7 +255,7 @@
             </div>
         </section>
 
-        <!-- SLIDE 6: MODELO DE NEGOCIOS -->
+        <!-- SLIDE 7: MODELO DE NEGOCIOS -->
         <section class="biz-section">
             <div style="width: 100%;">
                 <h2 class="huge-title text-outline">MODELO DE</h2>
@@ -265,7 +273,7 @@
             </div>
         </section>
 
-        <!-- SLIDE 7: ROADMAP (ESCALABILIDAD) -->
+        <!-- SLIDE 8: ROADMAP (ESCALABILIDAD) -->
         <section class="roadmap-section">
             <div data-speed="1.1" style="width: 100%;">
                 <h2 class="huge-title" style="font-size: clamp(2rem, 6vw, 6rem);">ESCALABILIDAD</h2>
@@ -286,7 +294,7 @@
             </div>
         </section>
 
-        <!-- SLIDE 8: CIERRE DEL EQUIPO -->
+        <!-- SLIDE 9: CIERRE DEL EQUIPO -->
         <section class="footer-section">
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 <h2 class="huge-title">LISTOS PARA</h2>
@@ -391,7 +399,7 @@
             scrollTrigger: { trigger: ".problem-section", start: "top 60%", end: "center center", scrub: 1 }
         });
 
-        // 6. SCROLL HORIZONTAL DE ECOSISTEMA (Los 3 paneles arreglados)
+        // 6. SCROLL HORIZONTAL DE ECOSISTEMA (Los 2 paneles)
         const hzContainer = document.querySelector('.horizontal-container');
         const panels = gsap.utils.toArray('.panel');
         gsap.to(panels, {
