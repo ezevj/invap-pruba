@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosmos Engine - Pitch Deck INVAP</title>
-    
     <!-- Fuentes Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,13 +11,12 @@
     
     <style>
         /* ==========================================
-           VARIABLES & RESET DE AGENCIA
+           VARIABLES & RESET
            ========================================== */
         :root {
             --bg-deep: #020308;
             --text-main: #f8fafc;
             --accent-cyan: #00f0ff;
-            --accent-purple: #8a2be2;
             --font-display: 'Syncopate', sans-serif;
             --font-body: 'Space Grotesk', sans-serif;
         }
@@ -98,7 +96,7 @@
         .img-mask img { width: 100%; height: 130%; object-fit: cover; position: absolute; top: -15%; }
         .glass-badge { position: absolute; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 1rem 2rem; border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 30px; font-weight: bold; color: var(--accent-cyan); text-transform: uppercase; font-family: var(--font-display); font-size: 0.8rem; z-index: 10;}
 
-        /* NUEVA SLIDE: CAJA ABIERTA (Despiece) */
+        /* SLIDE 4: CAJA ABIERTA (Despiece) */
         .despiece-section { flex-direction: column; text-align: center; padding-top: 5vh; }
         .foto-premium-container {
             width: 100%; max-width: 1200px; height: 60vh; margin-top: 3rem;
@@ -109,22 +107,22 @@
             width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
         }
 
-        /* SOLUCIÓN (Scroll Horizontal de 3 Paneles - ARREGLADO) */
-        .horizontal-wrapper { overflow: hidden; width: 100%; }
-        /* 300vw exactos para 3 paneles */
-        .horizontal-container { display: flex; width: 300vw; height: 100vh; align-items: center; flex-wrap: nowrap; }
-        /* Flex 0 0 100vw evita que se aplasten y se corten */
-        .panel { flex: 0 0 100vw; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 5vw; }
-        .panel h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 2rem; font-family: var(--font-display); color: var(--text-main); text-align: center; }
-        
-        /* Contenedores de iframes aislados para evitar bugs de scroll */
+        /* SLIDE 5: LGM-1 EXCLUSIVA (Vertical) */
+        .lgm1-section { flex-direction: column; text-align: center; padding-top: 5vh; }
         .iframe-luxury { 
             width: 100%; max-width: 1200px; aspect-ratio: 16/9; border-radius: 16px; 
             border: 1px solid rgba(0, 240, 255, 0.3); box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(0, 240, 255, 0.1); 
             background: #050914; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;
             overscroll-behavior: contain; touch-action: pan-y pinch-zoom;
         }
-        .iframe-luxury iframe { pointer-events: auto; }
+
+        /* SLIDE 6: SOLUCIÓN (Scroll Horizontal de 2 Paneles - Titius y Caja) */
+        .horizontal-wrapper { overflow: hidden; width: 100%; }
+        /* 200vw exactos para 2 paneles */
+        .horizontal-container { display: flex; width: 200vw; height: 100vh; align-items: center; flex-wrap: nowrap; }
+        /* Flex 0 0 100vw evita que se aplasten y se corten */
+        .panel { flex: 0 0 100vw; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 5vw; }
+        .panel h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 2rem; font-family: var(--font-display); color: var(--text-main); text-align: center; }
 
         /* NEGOCIOS Y ROADMAP */
         .biz-section, .roadmap-section { flex-direction: column; text-align: center; }
@@ -209,7 +207,6 @@
                 </div>
                 <div class="img-mask">
                     <img class="parallax-img" src="foto-taller.jpg" alt="Validación en Bariloche" onerror="this.style.display='none'">
-                    <span style="color:var(--accent-cyan); font-family:monospace; position:absolute; z-index:-1;">[ ESPACIO PARA foto-taller.jpg ]</span>
                     <div class="glass-badge">Testeo en Aula N°48</div>
                 </div>
             </div>
@@ -224,48 +221,51 @@
             </div>
             
             <div class="foto-premium-container" data-speed="1.1">
-                <!-- ACÁ VA LA FOTO EN ALTA CALIDAD DE LAS PIEZAS O LA CAJA ABIERTA (Fondo transparente idealmente) -->
+                <!-- ACÁ VA LA FOTO EN ALTA CALIDAD DE LAS PIEZAS -->
                 <img src="kit-abierto.png" alt="Despiece del Kit Cosmos Engine" onerror="this.style.display='none'">
-                <span style="color:rgba(255,255,255,0.2); font-family:var(--font-display); position:absolute; z-index:-1; font-size:1.5rem;">[ ESPACIO PARA kit-abierto.png ]</span>
             </div>
         </section>
 
-        <!-- SLIDE 5: ECOSISTEMA (Scroll Horizontal de 3 Paneles Arreglado) -->
+        <!-- SLIDE 5: LGM-1 EXCLUSIVA (Vertical) -->
+        <section class="lgm1-section">
+            <div data-speed="0.9" style="margin-bottom: 2rem;">
+                <h2 class="huge-title text-outline">MISIÓN</h2>
+                <h2 class="huge-title">LGM-1</h2>
+                <p class="subtitle">Analiza señales, descubre púlsares y aprende telecomunicaciones.</p>
+            </div>
+            
+            <!-- ACÁ LLAMAMOS AL ARCHIVO EXACTO DE TU GITHUB: lgm1.html -->
+            <div class="iframe-luxury" style="max-width: 1200px; height: 60vh; border-radius: 20px;" data-lenis-prevent="true">
+                <iframe src="lgm1.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: SOLUCIÓN (Scroll Horizontal de 2 Paneles: Titius y Caja) -->
         <section class="horizontal-wrapper">
             <div class="horizontal-container">
-                
-                <!-- Panel 1: Juego LGM-1 -->
-                <div class="panel">
-                    <h2>Simulador LGM-1</h2>
-                    <!-- data-lenis-prevent frena a Lenis para que no moleste los clics internos -->
-                    <div class="iframe-luxury" data-lenis-prevent="true">
-                        <iframe src="lgm1/index.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
-                        <span style="color:rgba(255,255,255,0.3); font-family:monospace; position:absolute; z-index:1;">[ ESPACIO PARA JUEGO LGM-1 ]</span>
-                    </div>
-                </div>
 
-                <!-- Panel 2: Simulador Titius-Bode -->
+                <!-- Panel 1: Simulador Titius-Bode -->
                 <div class="panel">
                     <h2>Simulación Titius-Bode</h2>
+                    <!-- ACÁ LLAMAMOS AL ARCHIVO EXACTO DE TU GITHUB: titusbode.html -->
                     <div class="iframe-luxury" data-lenis-prevent="true">
-                        <iframe src="titius/index.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
-                        <span style="color:rgba(255,255,255,0.3); font-family:monospace; position:absolute; z-index:1;">[ ESPACIO PARA SIMULADOR TITIUS ]</span>
+                        <iframe src="titusbode.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
                     </div>
                 </div>
                 
-                <!-- Panel 3: Visor 3D (Arreglado el bug del movimiento loco) -->
+                <!-- Panel 2: Visor 3D -->
                 <div class="panel">
                     <h2>Diseño Industrial (Empaque)</h2>
+                    <!-- ACÁ LLAMAMOS AL ARCHIVO EXACTO DE TU GITHUB: visor-caja.html -->
                     <div class="iframe-luxury" style="background: transparent; border: none; box-shadow: none;" data-lenis-prevent="true">
                         <iframe src="visor-caja.html" allowtransparency="true" style="width:100%; height:100%; border:none; background:transparent; position:relative; z-index:2;"></iframe>
-                        <span style="color:rgba(255,255,255,0.3); font-family:monospace; position:absolute; z-index:1;">[ ESPACIO PARA visor-caja.html ]</span>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- SLIDE 6: MODELO DE NEGOCIOS -->
+        <!-- SLIDE 7: MODELO DE NEGOCIOS -->
         <section class="biz-section">
             <h2 class="huge-title text-outline">MODELO DE</h2>
             <h2 class="huge-title">NEGOCIOS</h2>
@@ -281,7 +281,7 @@
             </div>
         </section>
 
-        <!-- SLIDE 7: ROADMAP (ESCALABILIDAD) -->
+        <!-- SLIDE 8: ROADMAP (ESCALABILIDAD) -->
         <section class="roadmap-section">
             <div data-speed="1.1">
                 <h2 class="huge-title" style="font-size: clamp(2rem, 6vw, 6rem);">ESCALABILIDAD</h2>
@@ -302,15 +302,14 @@
             </div>
         </section>
 
-        <!-- SLIDE 8: CIERRE DEL EQUIPO -->
+        <!-- SLIDE 9: CIERRE DEL EQUIPO -->
         <section class="footer-section">
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 <h2 class="huge-title">LISTOS PARA</h2>
                 <h2 class="huge-title text-outline">EL DESPEGUE</h2>
                 
                 <div class="qr-luxury">
-                    <img src="qr-cosmos.png" alt="QR" style="width:100%;height:100%;object-fit:contain;border-radius:12px;" onerror="this.style.opacity='0.1'">
-                    <span style="color:#000; font-family:var(--font-display); font-weight:bold; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:-1; font-size:0.8rem; text-align:center;">FALTA<br>QR.PNG</span>
+                    <img src="qr-cosmos.png" alt="QR" style="width:100%;height:100%;object-fit:contain;border-radius:12px;" onerror="this.style.opacity='0'">
                 </div>
                 
                 <!-- ESPACIO PARA EL GRUPO -->
@@ -414,7 +413,7 @@
             scrollTrigger: { trigger: ".img-mask", start: "top bottom", end: "bottom top", scrub: true }
         });
 
-        // 7. SCROLL HORIZONTAL DE ECOSISTEMA (Los 3 paneles arreglados)
+        // 7. SCROLL HORIZONTAL DE ECOSISTEMA (Los 2 paneles arreglados para Titius y Caja)
         const hzContainer = document.querySelector('.horizontal-container');
         const panels = gsap.utils.toArray('.panel');
         gsap.to(panels, {
