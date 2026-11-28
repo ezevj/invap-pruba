@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosmos Engine - Pitch Deck INVAP</title>
+    
     <!-- Fuentes Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,12 +12,13 @@
     
     <style>
         /* ==========================================
-           VARIABLES & RESET
+           VARIABLES & RESET DE AGENCIA
            ========================================== */
         :root {
             --bg-deep: #020308;
             --text-main: #f8fafc;
             --accent-cyan: #00f0ff;
+            --accent-purple: #8a2be2;
             --font-display: 'Syncopate', sans-serif;
             --font-body: 'Space Grotesk', sans-serif;
         }
@@ -68,38 +70,33 @@
             font-family: var(--font-display); 
             text-align: center;
             letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
         }
         .subtitle { 
             font-size: clamp(1.2rem, 2.5vw, 1.8rem); 
             font-weight: 300; 
             max-width: 900px; 
-            margin: 2rem auto 0 auto; 
+            margin: 1.5rem auto 0 auto; 
             line-height: 1.6; 
             color: #cbd5e1; 
             text-align: center;
         }
 
-        section { position: relative; width: 100%; min-height: 100vh; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 0 5vw; }
+        section { position: relative; width: 100%; min-height: 100vh; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 0 5vw; flex-direction: column;}
 
-        /* SLIDE 1 & 2 */
-        .hero, .problem-section { flex-direction: column; text-align: center; }
+        /* SLIDE 1 & 2 (Separados para evitar superposición) */
+        .hero { justify-content: center; text-align: center; min-height: 80vh; padding-top: 10vh;}
+        .problem-section { justify-content: flex-start; text-align: center; min-height: 80vh; padding-top: 5vh;}
         .reveal-word { display: inline-block; opacity: 0.1; transform: translateY(30px); font-size: clamp(1.8rem, 4vw, 3.5rem); font-weight: 700; margin-right: 15px; line-height: 1.4; }
 
-        /* TRACCIÓN (Aulas) */
-        .traction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; width: 100%; max-width: 1400px; align-items: center; margin: 0 auto; }
-        .img-mask { 
-            overflow: hidden; border-radius: 20px; height: 70vh; width: 100%; position: relative; 
-            border: 1px solid rgba(0, 240, 255, 0.2); background: rgba(255,255,255,0.02);
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.05);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .img-mask img { width: 100%; height: 130%; object-fit: cover; position: absolute; top: -15%; }
-        .glass-badge { position: absolute; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 1rem 2rem; border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 30px; font-weight: bold; color: var(--accent-cyan); text-transform: uppercase; font-family: var(--font-display); font-size: 0.8rem; z-index: 10;}
+        /* TRACCIÓN (Sin foto) */
+        .traction-section { justify-content: center; text-align: center; }
+        .traction-content { max-width: 1000px; margin: 0 auto; }
 
-        /* SLIDE 4: CAJA ABIERTA (Despiece) */
-        .despiece-section { flex-direction: column; text-align: center; padding-top: 5vh; }
+        /* SLIDE CAJA ABIERTA (Despiece) */
+        .despiece-section { text-align: center; padding-top: 5vh; }
         .foto-premium-container {
-            width: 100%; max-width: 1200px; height: 60vh; margin-top: 3rem;
+            width: 100%; max-width: 1200px; height: 50vh; margin-top: 3rem;
             position: relative; display: flex; justify-content: center; align-items: center;
             border-radius: 20px; background: radial-gradient(circle, rgba(0,240,255,0.05), transparent 70%);
         }
@@ -107,25 +104,25 @@
             width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
         }
 
-        /* SLIDE 5: LGM-1 EXCLUSIVA (Vertical) */
-        .lgm1-section { flex-direction: column; text-align: center; padding-top: 5vh; }
+        /* SOLUCIÓN (Scroll Horizontal de 3 Paneles - ARREGLADO EL ANCHO) */
+        .horizontal-wrapper { overflow: hidden; width: 100%; min-height: 100vh; display: block; padding: 0;}
+        /* 300vw exactos para 3 paneles (LGM1, Titius, Caja) */
+        .horizontal-container { display: flex; width: 300vw; height: 100vh; align-items: center; flex-wrap: nowrap; }
+        /* Flex 0 0 100vw evita que se aplasten y se corten */
+        .panel { flex: 0 0 100vw; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 5vw; }
+        .panel h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 2rem; font-family: var(--font-display); color: var(--text-main); text-align: center; }
+        
+        /* Contenedores de iframes aislados para evitar bugs de scroll */
         .iframe-luxury { 
             width: 100%; max-width: 1200px; aspect-ratio: 16/9; border-radius: 16px; 
             border: 1px solid rgba(0, 240, 255, 0.3); box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(0, 240, 255, 0.1); 
             background: #050914; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;
             overscroll-behavior: contain; touch-action: pan-y pinch-zoom;
         }
-
-        /* SLIDE 6: SOLUCIÓN (Scroll Horizontal de 2 Paneles - Titius y Caja) */
-        .horizontal-wrapper { overflow: hidden; width: 100%; }
-        /* 200vw exactos para 2 paneles */
-        .horizontal-container { display: flex; width: 200vw; height: 100vh; align-items: center; flex-wrap: nowrap; }
-        /* Flex 0 0 100vw evita que se aplasten y se corten */
-        .panel { flex: 0 0 100vw; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 5vw; }
-        .panel h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 2rem; font-family: var(--font-display); color: var(--text-main); text-align: center; }
+        .iframe-luxury iframe { pointer-events: auto; }
 
         /* NEGOCIOS Y ROADMAP */
-        .biz-section, .roadmap-section { flex-direction: column; text-align: center; }
+        .biz-section, .roadmap-section { text-align: center; }
         .cards-container { display: flex; gap: 3rem; justify-content: center; width: 100%; max-width: 1300px; margin-top: 4rem; flex-wrap: wrap; }
         .tilt-card { 
             background: rgba(255,255,255,0.02); border: 1px solid rgba(0, 240, 255, 0.15); padding: 4rem 3rem; border-radius: 30px; 
@@ -142,7 +139,7 @@
         .time-node h4 { font-family: var(--font-display); color: var(--accent-cyan); font-size: 1.3rem; margin-bottom: 1rem; }
 
         /* CIERRE DEL GRUPO */
-        .footer-section { flex-direction: column; text-align: center; padding-bottom: 10vh; }
+        .footer-section { text-align: center; padding-bottom: 10vh; }
         .qr-luxury { 
             width: 260px; height: 260px; padding: 15px; background: rgba(255,255,255,0.95); border-radius: 24px; 
             margin: 3rem auto; transform: rotate(-3deg); transition: transform 0.5s ease, box-shadow 0.5s ease; 
@@ -151,7 +148,6 @@
         .qr-luxury:hover { transform: rotate(0deg) scale(1.05); box-shadow: 0 0 80px rgba(0,240,255,0.5); }
 
         @media (max-width: 900px) {
-            .traction-grid { grid-template-columns: 1fr; text-align: center; }
             .iframe-luxury { aspect-ratio: 4/3; }
         }
     </style>
@@ -179,9 +175,9 @@
             <p class="subtitle" data-speed="1.2">El universo es obligatorio en las escuelas, pero las aulas no tienen estrellas.</p>
         </section>
 
-        <!-- SLIDE 2: EL PROBLEMA (Validado con copywriting) -->
+        <!-- SLIDE 2: EL PROBLEMA -->
         <section class="problem-section">
-            <div style="max-width: 1100px;">
+            <div style="max-width: 1100px; margin-top: 2rem;">
                 <span class="reveal-word text-outline">Brecha</span>
                 <span class="reveal-word">tecnológica.</span><br>
                 <span class="reveal-word">Docentes</span>
@@ -197,22 +193,16 @@
             </div>
         </section>
 
-        <!-- SLIDE 3: TRACCIÓN DEL EQUIPO -->
+        <!-- SLIDE 3: TRACCIÓN DEL EQUIPO (Sin foto) -->
         <section class="traction-section">
-            <div class="traction-grid">
-                <div class="text-block" data-speed="1.1">
-                    <h2 class="huge-title text-outline" style="text-align: left;">TRACCIÓN</h2>
-                    <h2 class="huge-title" style="text-align: left;">EMPÍRICA</h2>
-                    <p class="subtitle" style="text-align: left; margin: 2rem 0 0 0;">Llevamos 3 años validando metodologías STEM en aulas reales de Bariloche. El interés del alumnado es absoluto y los docentes piden soluciones. El hardware artesanal no escala. Cosmos Engine es la solución pedagógica definitiva.</p>
-                </div>
-                <div class="img-mask">
-                    <img class="parallax-img" src="foto-taller.jpg" alt="Validación en Bariloche" onerror="this.style.display='none'">
-                    <div class="glass-badge">Testeo en Aula N°48</div>
-                </div>
+            <div class="traction-content" data-speed="1.1">
+                <h2 class="huge-title text-outline">TRACCIÓN</h2>
+                <h2 class="huge-title">EMPÍRICA</h2>
+                <p class="subtitle">Llevamos 3 años validando metodologías STEM en aulas reales de Bariloche. El interés del alumnado es absoluto y los docentes piden soluciones. El hardware artesanal no escala. Cosmos Engine es la solución pedagógica definitiva.</p>
             </div>
         </section>
 
-        <!-- SLIDE 4: NUEVO - INTERIOR DEL KIT -->
+        <!-- SLIDE 4: INTERIOR DEL KIT -->
         <section class="despiece-section">
             <div data-speed="0.9">
                 <h2 class="huge-title">HARDWARE</h2>
@@ -226,37 +216,29 @@
             </div>
         </section>
 
-        <!-- SLIDE 5: LGM-1 EXCLUSIVA (Vertical) -->
-        <section class="lgm1-section">
-            <div data-speed="0.9" style="margin-bottom: 2rem;">
-                <h2 class="huge-title text-outline">MISIÓN</h2>
-                <h2 class="huge-title">LGM-1</h2>
-                <p class="subtitle">Analiza señales, descubre púlsares y aprende telecomunicaciones.</p>
-            </div>
-            
-            <!-- ACÁ LLAMAMOS AL ARCHIVO EXACTO DE TU GITHUB: lgm1.html -->
-            <div class="iframe-luxury" style="max-width: 1200px; height: 60vh; border-radius: 20px;" data-lenis-prevent="true">
-                <iframe src="lgm1.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
-            </div>
-        </section>
-
-        <!-- SLIDE 6: SOLUCIÓN (Scroll Horizontal de 2 Paneles: Titius y Caja) -->
+        <!-- SLIDE 5: ECOSISTEMA (Scroll Horizontal de 3 Paneles: LGM1, Titius y Caja) -->
         <section class="horizontal-wrapper">
             <div class="horizontal-container">
+                
+                <!-- Panel 1: Simulador LGM-1 -->
+                <div class="panel">
+                    <h2>MISIÓN LGM-1</h2>
+                    <div class="iframe-luxury" data-lenis-prevent="true">
+                        <iframe src="lgm1.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
+                    </div>
+                </div>
 
-                <!-- Panel 1: Simulador Titius-Bode -->
+                <!-- Panel 2: Simulador Titius-Bode -->
                 <div class="panel">
                     <h2>Simulación Titius-Bode</h2>
-                    <!-- ACÁ LLAMAMOS AL ARCHIVO EXACTO DE TU GITHUB: titusbode.html -->
                     <div class="iframe-luxury" data-lenis-prevent="true">
                         <iframe src="titusbode.html" style="width:100%;height:100%;border:none;position:relative;z-index:2;"></iframe>
                     </div>
                 </div>
                 
-                <!-- Panel 2: Visor 3D -->
+                <!-- Panel 3: Visor 3D -->
                 <div class="panel">
                     <h2>Diseño Industrial (Empaque)</h2>
-                    <!-- ACÁ LLAMAMOS AL ARCHIVO EXACTO DE TU GITHUB: visor-caja.html -->
                     <div class="iframe-luxury" style="background: transparent; border: none; box-shadow: none;" data-lenis-prevent="true">
                         <iframe src="visor-caja.html" allowtransparency="true" style="width:100%; height:100%; border:none; background:transparent; position:relative; z-index:2;"></iframe>
                     </div>
@@ -265,25 +247,27 @@
             </div>
         </section>
 
-        <!-- SLIDE 7: MODELO DE NEGOCIOS -->
+        <!-- SLIDE 6: MODELO DE NEGOCIOS -->
         <section class="biz-section">
-            <h2 class="huge-title text-outline">MODELO DE</h2>
-            <h2 class="huge-title">NEGOCIOS</h2>
-            <div class="cards-container">
-                <div class="tilt-card vanilla-tilt">
-                    <h3 class="text-outline">B2G</h3>
-                    <p>Licitación de Kits de Laboratorio a Ministerios de Educación. Resolviendo la exigencia curricular en ciencias a nivel estatal con hardware escalable.</p>
-                </div>
-                <div class="tilt-card vanilla-tilt">
-                    <h3>B2B</h3>
-                    <p>Suscripción a la plataforma web (SaaS) para colegios privados e institutos. Incluye capacitación docente, métricas de alumnos y simuladores premium.</p>
+            <div style="width: 100%;">
+                <h2 class="huge-title text-outline">MODELO DE</h2>
+                <h2 class="huge-title">NEGOCIOS</h2>
+                <div class="cards-container">
+                    <div class="tilt-card vanilla-tilt">
+                        <h3 class="text-outline">B2G</h3>
+                        <p>Licitación de Kits de Laboratorio a Ministerios de Educación. Resolviendo la exigencia curricular en ciencias a nivel estatal con hardware escalable.</p>
+                    </div>
+                    <div class="tilt-card vanilla-tilt">
+                        <h3>B2B</h3>
+                        <p>Suscripción a la plataforma web (SaaS) para colegios privados e institutos. Incluye capacitación docente, métricas de alumnos y simuladores premium.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 8: ROADMAP (ESCALABILIDAD) -->
+        <!-- SLIDE 7: ROADMAP (ESCALABILIDAD) -->
         <section class="roadmap-section">
-            <div data-speed="1.1">
+            <div data-speed="1.1" style="width: 100%;">
                 <h2 class="huge-title" style="font-size: clamp(2rem, 6vw, 6rem);">ESCALABILIDAD</h2>
                 <div class="timeline">
                     <div class="time-node">
@@ -302,7 +286,7 @@
             </div>
         </section>
 
-        <!-- SLIDE 9: CIERRE DEL EQUIPO -->
+        <!-- SLIDE 8: CIERRE DEL EQUIPO -->
         <section class="footer-section">
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 <h2 class="huge-title">LISTOS PARA</h2>
@@ -407,13 +391,7 @@
             scrollTrigger: { trigger: ".problem-section", start: "top 60%", end: "center center", scrub: 1 }
         });
 
-        // 6. PARALLAX FOTO VALIDACIÓN
-        gsap.to('.parallax-img', {
-            yPercent: 30, ease: "none",
-            scrollTrigger: { trigger: ".img-mask", start: "top bottom", end: "bottom top", scrub: true }
-        });
-
-        // 7. SCROLL HORIZONTAL DE ECOSISTEMA (Los 2 paneles arreglados para Titius y Caja)
+        // 6. SCROLL HORIZONTAL DE ECOSISTEMA (Los 3 paneles arreglados)
         const hzContainer = document.querySelector('.horizontal-container');
         const panels = gsap.utils.toArray('.panel');
         gsap.to(panels, {
@@ -425,7 +403,7 @@
             }
         });
 
-        // 8. TARJETAS 3D (Modelo de Negocios)
+        // 7. TARJETAS 3D (Modelo de Negocios)
         document.querySelectorAll('.vanilla-tilt').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
